@@ -62,11 +62,13 @@
         <a-gltf-model src="#arcade" animation-mixer="clip: *"></a-gltf-model>
 
         <!-- Game Boundary (Clickable) -->
-        <a-box id="game_boundary" scale="4.243 10.358 4.107" position="-2.448 5.177 -0.01" material="opacity: 0"
+        <a-box id="game_boundary" scale="4.243 10.358 4.107" position="-2.448 4.2 -0.01" material="opacity: 0"
         geometry=""></a-box>
+        <a-text animation="property: position; from: -2.802 10.781 0.098; to: -2.802 10.9 0.098; easing: linear; dur: 1000; dir: alternate; loop: true; " text="width: 10.71; align: center; height: 0.6; letterSpacing: 0.4; side: double; value: Click to play!" rotation="0 -90 0" position="-2.802 10.781 0.098"></a-text>s
 
         <!-- Undefined Box -->
-        <a-box scale="124.916 34.74 94.862" position="0 11.43 0" color="black"></a-box>
+        <a-plane color="black" material="side: double" geometry="" rotation="0 90 0" position="-62.339 7.261 0" scale="86.60064 55.95623 36.80205"></a-plane>
+        <a-plane color="black" material="side: double; blending: subtractive" geometry="" rotation="0 90 0" position="55.169 7.261 0" scale="86.60064 55.95623 36.80205"></a-plane>
     </a-scene>
 
     <script>
