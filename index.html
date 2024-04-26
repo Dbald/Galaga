@@ -37,7 +37,7 @@
             transition: 0.5s;
             color: white;
         }
-        button:hover {
+        #close-button:hover {
             cursor: pointer;
             
             background-color: black;
@@ -87,67 +87,55 @@
     </a-scene>
 
     <script>
-
-        document.addEventListener('DOMContentLoaded', function () {
-            var musicEntity = document.querySelector('#background-music');
-            var playButton = document.getElementById('play-music');
-            var pauseButton = document.getElementById('pause-music');
-            var volumeControl = document.getElementById('volume-control');
-
-            playButton.addEventListener('click', function () {
-                musicEntity.components.sound.playSound();
-            });
-
-            pauseButton.addEventListener('click', function () {
-                musicEntity.components.sound.pauseSound();
-            });
-
-            volumeControl.addEventListener('input', function () {
-                musicEntity.setAttribute('sound', 'volume', this.value);
-            });
-        });
-
-
-
         function showGameIframe() {
-            // Check if the iframe already exists
-            let iframe = document.getElementById('game-iframe');
-            if (!iframe) {
-                iframe = document.createElement('iframe');
-                iframe.setAttribute('id', 'game-iframe');
-                iframe.setAttribute('src', 'https://www.retrogames.cc/embed/8573-galaga-namco.html');
-                // Set iframe styles
-                iframe.style.position = 'absolute';
-                iframe.style.top = '50%';
-                iframe.style.left = '50%';
-                iframe.style.transform = 'translate(-50%, -50%)';
-                iframe.style.zIndex = '1000'; // Ensure it's on top
-                iframe.style.width = '640px'; // Set appropriate size
-                iframe.style.height = '480px';
-                document.body.appendChild(iframe);
-            } else {
-                // If the iframe exists, just make it visible
-                iframe.style.display = 'block';
-            }
+    let iframe = document.getElementById('game-iframe');
+    let closeButton = document.getElementById('close-button');
 
-            // Create a close button for the iframe
-            let closeButton = document.createElement('button');
-            closeButton.innerText = 'Close Game';
-            closeButton.style.position = 'fixed';
-            closeButton.style.top = '15px';
-            closeButton.style.right = '15px';
-            closeButton.style.zIndex = '1001'; // Above the iframe
-            closeButton.onclick = function () {
-                iframe.style.display = 'none'; // Hide the iframe
-                // Optionally, remove the iframe and button from the document to clean up
-                document.body.removeChild(iframe);
-                document.body.removeChild(closeButton);
-            };
+    // Check if the iframe already exists
+    if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.setAttribute('id', 'game-iframe');
+        iframe.setAttribute('src', 'https://www.retrogames.cc/embed/8573-galaga-namco.html');
+        iframe.style.cssText = `
+            position: fixed; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%);
+            z-index: 1000; 
+            width: 100%; 
+            max-width: 640px; 
+            height: 100vh; 
+            max-height: 480px; 
+            border: none;`; // Responsive and centered styling
+        document.body.appendChild(iframe);
 
-            // Append the close button to the body or a specific container
-            document.body.appendChild(closeButton);
-
-        }
+        // Create a close button for the iframe
+        closeButton = document.createElement('button');
+        closeButton.setAttribute('id', 'close-button');
+        closeButton.innerText = 'Close Game';
+        closeButton.style.cssText = `
+            position: fixed; 
+            top: 20px; 
+            right: 20px; 
+            z-index: 1001; 
+            padding: 10px 20px; 
+            font-size: 16px; 
+            color: white; 
+            background-color: rgba(253, 0, 0, 0.342); 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer;`; // Stylish close button
+        closeButton.onclick = function () {
+            document.body.removeChild(iframe);
+            document.body.removeChild(closeButton);
+        };
+        document.body.appendChild(closeButton);
+    } else {
+        // If the iframe exists, just make it visible
+        iframe.style.display = 'block';
+        closeButton.style.display = 'block'; // Make sure the close button is also visible
+    }
+}
 
         document.querySelector('#game_boundary').addEventListener('click', function () {
             // Function to show the iframe
