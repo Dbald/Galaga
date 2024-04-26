@@ -8,12 +8,13 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Galaga</title>
+    <title>Namco Museum Vol.1: Galaga</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="">
+    <link rel="icon" type="image/png" href="/assets/img/ship1.png">
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/aframe-physics-system/dist/aframe-physics-system.min.js"></script> -->
 
     <style>
         #music-controls button, #music-controls input[type=range] {
@@ -22,9 +23,24 @@
         }
       
         #music-controls {
-          background-color: rgba(0, 0, 0, 0.5);
           padding: 10px;
           border-radius: 8px;
+        }
+        button {
+            font-size: 20px;
+            width: 180px;
+            height: auto;
+            padding: 1%;
+            border: none;
+            border-radius: 25px;
+            background-color: rgba(253, 0, 0, 0.342); /* 50% opacity */
+            transition: 0.5s;
+            color: white;
+        }
+        button:hover {
+            cursor: pointer;
+            
+            background-color: black;
         }
       </style>
       
@@ -32,20 +48,18 @@
 </head>
 
 <body>
-    <div id="music-controls" style="position: fixed; bottom: 20px; left: 20px; z-index: 1000;">
-        <button id="play-music">Play</button>
-        <button id="pause-music">Pause</button>
-        Volume: <input type="range" id="volume-control" min="0" max="1" step="0.1" value="1">
-    </div>
+    <!-- <div id="music-controls" style="position: fixed; top: 20px; left: 20px; z-index: 1000;">
+        <img id="keys" src="https://m.media-amazon.com/images/I/41g0ReBbe0L.jpg" alt="wasd">
+        
+    </div> -->
 
     <a-scene background="color: black" cursor="rayOrigin: mouse" raycaster="objects: .raycastable">
         <a-assets timeout="30000">
             <a-item-asset id="arcade" src="/assets/Galaga Arcade Room/arcade.gltf"></a-item-asset>
-            <!-- <audio id="music" src="/sound/01 KNOTCH - SOMEONE TO LOVE.mp3" preload="auto"></audio> -->
         </a-assets>
         <!-- Camera w/ VR Controls -->
-        <a-entity id="cameraRig" movement-controls position="-9 6 0" rotation="0 -90 0">
-            <a-camera cursor="rayOrigin: mouse"></a-camera>
+        <a-entity id="cameraRig" position="-9 6 0" rotation="0 -90 0">
+            <a-camera wasd-controls="enabled: false" cursor="rayOrigin: mouse"></a-camera>
             <!-- Motion Controllers -->
             <!-- Left -->
             <a-entity oculus-touch-controls="hand: left; model:true"></a-entity>
@@ -54,7 +68,7 @@
         </a-entity>
 
         <!-- Sound  -->
-        <a-sound src="#music" autoplay="true" id="background-music"></a-sound>
+        <!-- <a-sound src="#music" autoplay="true" id="background-music"></a-sound> -->
 
         <!-- Geometry -->
 
@@ -67,14 +81,12 @@
         <a-text animation="property: position; from: -2.802 10.781 0.098; to: -2.802 10.9 0.098; easing: linear; dur: 1000; dir: alternate; loop: true; " text="width: 10.71; align: center; height: 0.6; letterSpacing: 0.4; side: double; value: Click to play!" rotation="0 -90 0" position="-2.802 10.781 0.098"></a-text>s
 
         <!-- Undefined Box -->
+        
         <a-plane color="black" material="side: double" geometry="" rotation="0 90 0" position="-62.339 7.261 0" scale="86.60064 55.95623 36.80205"></a-plane>
         <a-plane color="black" material="side: double; blending: subtractive" geometry="" rotation="0 90 0" position="55.169 7.261 0" scale="86.60064 55.95623 36.80205"></a-plane>
     </a-scene>
 
     <script>
-        document.querySelector('#background-music').addEventListener('sound-loaded', function () {
-            this.components.sound.playSound();
-        });
 
         document.addEventListener('DOMContentLoaded', function () {
             var musicEntity = document.querySelector('#background-music');
@@ -120,10 +132,10 @@
 
             // Create a close button for the iframe
             let closeButton = document.createElement('button');
-            closeButton.innerText = 'Close';
-            closeButton.style.position = 'absolute';
-            closeButton.style.top = '0';
-            closeButton.style.right = '0';
+            closeButton.innerText = 'Close Game';
+            closeButton.style.position = 'fixed';
+            closeButton.style.top = '15px';
+            closeButton.style.right = '15px';
             closeButton.style.zIndex = '1001'; // Above the iframe
             closeButton.onclick = function () {
                 iframe.style.display = 'none'; // Hide the iframe
