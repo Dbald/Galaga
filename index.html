@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <![endif]-->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Galaga</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
+
+    <style>
+        #music-controls button, #music-controls input[type=range] {
+          cursor: pointer;
+          margin-right: 10px;
+        }
+      
+        #music-controls {
+          background-color: rgba(0, 0, 0, 0.5);
+          padding: 10px;
+          border-radius: 8px;
+        }
+      </style>
+      
+
+</head>
+
+<body>
+    <div id="music-controls" style="position: fixed; bottom: 20px; left: 20px; z-index: 1000;">
+        <button id="play-music">Play</button>
+        <button id="pause-music">Pause</button>
+        Volume: <input type="range" id="volume-control" min="0" max="1" step="0.1" value="1">
+    </div>
+
+    <a-scene background="color: black" cursor="rayOrigin: mouse" raycaster="objects: .raycastable">
+        <a-assets timeout="30000">
+            <a-item-asset id="arcade" src="/assets/Galaga Arcade Room/arcade.gltf"></a-item-asset>
+            <!-- <audio id="music" src="/sound/01 KNOTCH - SOMEONE TO LOVE.mp3" preload="auto"></audio> -->
+        </a-assets>
+        <!-- Camera w/ VR Controls -->
+        <a-entity id="cameraRig" movement-controls position="-9 6 0" rotation="0 -90 0">
+            <a-camera cursor="rayOrigin: mouse"></a-camera>
+            <!-- Motion Controllers -->
+            <!-- Left -->
+            <a-entity oculus-touch-controls="hand: left; model:true"></a-entity>
+            <!-- Right -->
+            <a-entity oculus-touch-controls="hand: right; model:true"></a-entity>
+        </a-entity>
+
+        <!-- Sound  -->
+        <a-sound src="#music" autoplay="true" id="background-music"></a-sound>
+
+        <!-- Geometry -->
+
+        <!-- Arcade Model -->
+        <a-gltf-model src="#arcade" animation-mixer="clip: *"></a-gltf-model>
+
+        <!-- Game Boundary (Clickable) -->
+        <a-box id="game_boundary" scale="4.243 10.358 4.107" position="-2.448 5.177 -0.01" material="opacity: 0"
+        geometry=""></a-box>
+
+        <!-- Undefined Box -->
+        <a-box scale="124.916 34.74 94.862" position="0 11.43 0" color="black"></a-box>
+    </a-scene>
+
+    <script>
+        document.querySelector('#background-music').addEventListener('sound-loaded', function () {
+            this.components.sound.playSound();
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var musicEntity = document.querySelector('#background-music');
+            var playButton = document.getElementById('play-music');
+            var pauseButton = document.getElementById('pause-music');
+            var volumeControl = document.getElementById('volume-control');
+
+            playButton.addEventListener('click', function () {
+                musicEntity.components.sound.playSound();
+            });
+
+            pauseButton.addEventListener('click', function () {
+                musicEntity.components.sound.pauseSound();
+            });
+
+            volumeControl.addEventListener('input', function () {
+                musicEntity.setAttribute('sound', 'volume', this.value);
+            });
+        });
+
+
+
+        function showGameIframe() {
+            // Check if the iframe already exists
+            let iframe = document.getElementById('game-iframe');
+            if (!iframe) {
+                iframe = document.createElement('iframe');
+                iframe.setAttribute('id', 'game-iframe');
+                iframe.setAttribute('src', 'https://www.retrogames.cc/embed/8573-galaga-namco.html');
+                // Set iframe styles
+                iframe.style.position = 'absolute';
+                iframe.style.top = '50%';
+                iframe.style.left = '50%';
+                iframe.style.transform = 'translate(-50%, -50%)';
+                iframe.style.zIndex = '1000'; // Ensure it's on top
+                iframe.style.width = '640px'; // Set appropriate size
+                iframe.style.height = '480px';
+                document.body.appendChild(iframe);
+            } else {
+                // If the iframe exists, just make it visible
+                iframe.style.display = 'block';
+            }
+
+            // Create a close button for the iframe
+            let closeButton = document.createElement('button');
+            closeButton.innerText = 'Close';
+            closeButton.style.position = 'absolute';
+            closeButton.style.top = '0';
+            closeButton.style.right = '0';
+            closeButton.style.zIndex = '1001'; // Above the iframe
+            closeButton.onclick = function () {
+                iframe.style.display = 'none'; // Hide the iframe
+                // Optionally, remove the iframe and button from the document to clean up
+                document.body.removeChild(iframe);
+                document.body.removeChild(closeButton);
+            };
+
+            // Append the close button to the body or a specific container
+            document.body.appendChild(closeButton);
+
+        }
+
+        document.querySelector('#game_boundary').addEventListener('click', function () {
+            // Function to show the iframe
+            showGameIframe();
+        });
+
+    </script>
+</body>
+
+</html>
